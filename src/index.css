@@ -165,7 +165,6 @@
 
   .page-container {
     @apply min-h-screen relative overflow-hidden;
-    background: var(--gradient-hero);
   }
 }
 

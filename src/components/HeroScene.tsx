@@ -79,31 +79,31 @@ const EmotionTorus = ({ position, color }: { position: [number, number, number];
 };
 
 export const HeroScene = () => {
-  return (
-    <div className="absolute inset-0 -z-10">
-      <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
-        <Suspense fallback={null}>
-          <Environment preset="city" />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <pointLight position={[-10, -10, -5]} intensity={0.5} color="#14b8a6" />
+  // return (
+  //   <div className="absolute inset-0 -z-10">
+  //     <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+  //       <Suspense fallback={null}>
+  //         <Environment preset="city" />
+  //         <ambientLight intensity={0.5} />
+  //         <directionalLight position={[10, 10, 5]} intensity={1} />
+  //         <pointLight position={[-10, -10, -5]} intensity={0.5} color="#14b8a6" />
           
-          {/* Happy - Yellow/Gold sphere */}
-          <EmotionSphere position={[-3.5, 1.5, 0]} color="#eab308" speed={0.8} />
+  //         Happy - Yellow/Gold sphere
+  //         <EmotionSphere position={[-3.5, 1.5, 0]} color="#eab308" speed={0.8} />
           
-          {/* Calm - Teal sphere */}
-          <EmotionSphere position={[3.5, -1, 0]} color="#14b8a6" speed={1.2} />
+  //         {/* Calm - Teal sphere */}
+  //         <EmotionSphere position={[3.5, -1, 0]} color="#14b8a6" speed={1.2} />
           
-          {/* Energy - Coral box */}
-          <EmotionBox position={[2.5, 2, -2]} color="#f97316" />
+  //         {/* Energy - Coral box */}
+  //         <EmotionBox position={[2.5, 2, -2]} color="#f97316" />
           
-          {/* Focus - Blue torus */}
-          <EmotionTorus position={[-2.5, -1.5, -1]} color="#3b82f6" />
+  //         {/* Focus - Blue torus */}
+  //         <EmotionTorus position={[-2.5, -1.5, -1]} color="#3b82f6" />
           
-          {/* Surprise - Pink sphere */}
-          <EmotionSphere position={[0, -2.5, -3]} color="#ec4899" speed={1.5} />
-        </Suspense>
-      </Canvas>
-    </div>
-  );
+  //         {/* Surprise - Pink sphere */}
+  //         <EmotionSphere position={[0, -2.5, -3]} color="#ec4899" speed={1.5} />
+  //       </Suspense>
+  //     </Canvas>
+  //   </div>
+  // );
 };
