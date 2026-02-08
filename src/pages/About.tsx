@@ -41,7 +41,7 @@ const About = () => {
       {/* Hero */}
       <section className="relative py-20 px-4">
         <div className="blur-blob w-96 h-96 bg-primary/15 top-0 right-0" />
-        
+
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <StaggerContainer>
             <FadeUp>
@@ -50,7 +50,7 @@ const About = () => {
                 <span className="text-sm font-medium text-primary">Our Story</span>
               </div>
             </FadeUp>
-            
+
             <FadeUp delay={0.1}>
               <h1 className="font-display text-4xl md:text-6xl font-bold mb-6">
                 Making Emotions
@@ -60,7 +60,7 @@ const About = () => {
 
             <FadeUp delay={0.2}>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                EmotiSense was born from a simple belief: understanding our emotions is the foundation of personal growth, 
+                InnerGlow was born from a simple belief: understanding our emotions is the foundation of personal growth,
                 better relationships, and improved mental health. We harness the power of AI to make this understanding accessible to everyone.
               </p>
             </FadeUp>
@@ -79,8 +79,8 @@ const About = () => {
                   <Target className="w-12 h-12 text-primary mb-6" />
                   <h2 className="font-display text-3xl font-bold mb-4">Our Mission</h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    To democratize emotional intelligence through accessible, accurate, and empathetic AI technology. 
-                    We envision a world where everyone can understand their emotions better, leading to improved mental health, 
+                    To democratize emotional intelligence through accessible, accurate, and empathetic AI technology.
+                    We envision a world where everyone can understand their emotions better, leading to improved mental health,
                     stronger relationships, and more empathetic communities.
                   </p>
                 </div>
@@ -113,7 +113,7 @@ const About = () => {
       {/* Values */}
       <section className="py-20 px-4 relative">
         <div className="blur-blob w-80 h-80 bg-primary/10 top-1/2 left-0 -translate-y-1/2" />
-        
+
         <div className="max-w-6xl mx-auto relative z-10">
           <StaggerContainer className="text-center mb-12">
             <FadeUp>

@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Loader2, RefreshCw, Send, Sparkles, MessageCircle, AlertCircle } from "lucide-react";
+import { Camera, Loader2, RefreshCw, Sparkles, MessageCircle, AlertCircle, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StaggerContainer, FadeUp } from "@/components/PageTransition";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface EmotionResult {
   emotion: string;
@@ -20,6 +21,7 @@ interface AnalysisResult {
 }
 
 const Predict = () => {
+  const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -64,37 +66,103 @@ const Predict = () => {
     }
   }, [stopCamera]);
 
+  const saveEmotionRecord = useCallback(async (analysisResult: AnalysisResult) => {
+    try {
+      // Transform emotions array to match database schema
+      // Map display names back to database keys
+      const emotionNameMap: Record<string, string> = {
+        'happy': 'happy',
+        'sad': 'sad',
+        'anger': 'angry',
+        'surprise': 'surprised',
+        'fear': 'fearful',
+        'disgust': 'disgusted',
+        'neutral': 'neutral',
+      };
+
+      const emotionsObj: Record<string, number> = {};
+      analysisResult.emotions.forEach(e => {
+        const emotionKey = e.emotion.toLowerCase();
+        const dbKey = emotionNameMap[emotionKey] || emotionKey;
+        emotionsObj[dbKey] = e.percentage;
+      });
+
+      console.log('💾 Attempting to save emotion record:', {
+        emotionsObj,
+        dominantEmotion: analysisResult.emotions[0]?.emotion.toLowerCase(),
+        mixedEmotion: analysisResult.mixedEmotion,
+        suggestionsCount: analysisResult.suggestions?.length
+      });
+
+      // Get auth token if available
+      const authToken = localStorage.getItem('authToken');
+
+      const response = await fetch('/api/emotions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+        },
+        body: JSON.stringify({
+          emotions: emotionsObj,
+          dominantEmotion: analysisResult.emotions[0]?.emotion.toLowerCase() || 'neutral',
+          confidence: analysisResult.emotions[0]?.percentage || 0,
+          mixedEmotion: analysisResult.mixedEmotion,
+          explanation: analysisResult.explanation,
+          suggestions: analysisResult.suggestions,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Emotion record saved to database:', data);
+        toast.success('Emotion saved to your history!');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Failed to save emotion record:', response.status, errorData);
+        toast.error('Could not save to history');
+      }
+    } catch (error) {
+      console.error('Error saving emotion record:', error);
+      // Don't show error to user - saving is secondary to analysis
+    }
+  }, []);
+
   const analyzeEmotion = useCallback(async () => {
     if (!capturedImage) return;
-    
+
     setIsAnalyzing(true);
-    
-    // Simulated analysis - in production, this would call the backend API
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    // Mock result for demonstration
-    const mockResult: AnalysisResult = {
-      emotions: [
-        { emotion: "Happy", percentage: 45, color: "bg-emotion-happy" },
-        { emotion: "Neutral", percentage: 25, color: "bg-emotion-neutral" },
-        { emotion: "Surprise", percentage: 15, color: "bg-emotion-surprise" },
-        { emotion: "Sad", percentage: 8, color: "bg-emotion-sad" },
-        { emotion: "Fear", percentage: 5, color: "bg-emotion-fear" },
-        { emotion: "Anger", percentage: 2, color: "bg-emotion-anger" },
-      ],
-      mixedEmotion: "Contented Curiosity",
-      explanation: "Your expression shows a blend of genuine happiness with a touch of curiosity. This suggests you're in a positive, open mindset - perhaps engaged in something interesting or feeling content with your surroundings.",
-      suggestions: [
-        "Channel this positive energy into a creative project or learning something new",
-        "Share this moment with someone you care about - positive emotions are contagious",
-        "Take a moment to appreciate what's bringing you this sense of contentment",
-      ],
-    };
-    
-    setResult(mockResult);
-    setIsAnalyzing(false);
-    toast.success("Emotion analysis complete!");
-  }, [capturedImage]);
+
+    try {
+      const response = await fetch('/api/emotions/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: capturedImage,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to analyze emotion');
+      }
+
+      const apiResult = await response.json();
+
+      setResult(apiResult);
+      toast.success("Emotion analysis complete!");
+
+      // Auto-save the emotion record to database
+      await saveEmotionRecord(apiResult);
+    } catch (error: any) {
+      console.error('Emotion analysis error:', error);
+      toast.error(error.message || 'Failed to analyze emotion. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [capturedImage, saveEmotionRecord]);
 
   const reset = useCallback(() => {
     setCapturedImage(null);
@@ -130,7 +198,7 @@ const Predict = () => {
             className="glass-card rounded-3xl p-6 relative overflow-hidden"
           >
             <div className="blur-blob w-48 h-48 bg-primary/10 -top-24 -left-24" />
-            
+
             <div className="relative z-10">
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
                 <Camera className="w-5 h-5 text-primary" />
@@ -145,7 +213,7 @@ const Predict = () => {
                     <p className="text-center">Click "Start Camera" to begin</p>
                   </div>
                 )}
-                
+
                 <video
                   ref={videoRef}
                   autoPlay
@@ -153,7 +221,7 @@ const Predict = () => {
                   muted
                   className={`w-full h-full object-cover ${isStreaming ? "" : "hidden"}`}
                 />
-                
+
                 {capturedImage && (
                   <img
                     src={capturedImage}
@@ -161,7 +229,7 @@ const Predict = () => {
                     className="w-full h-full object-cover"
                   />
                 )}
-                
+
                 <canvas ref={canvasRef} className="hidden" />
               </div>
 
@@ -176,7 +244,7 @@ const Predict = () => {
 
                 {isStreaming && (
                   <>
-                    <Button onClick={captureImage} className="rounded-xl flex-1 glow-effect">
+                    <Button onClick={captureImage} className="rounded-xl flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/30">
                       <Camera className="w-4 h-4 mr-2" />
                       Capture
                     </Button>
@@ -186,18 +254,34 @@ const Predict = () => {
                   </>
                 )}
 
-                {capturedImage && !isAnalyzing && (
+                {capturedImage && !isAnalyzing && !result && (
                   <>
                     <Button
                       onClick={analyzeEmotion}
-                      className="rounded-xl flex-1 glow-effect"
+                      className="rounded-xl flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/30"
                       disabled={isAnalyzing}
                     >
                       <Sparkles className="w-4 h-4 mr-2" />
-                      Analyze Emotion
+                      Capture & Analyze Emotion
                     </Button>
                     <Button variant="outline" onClick={reset} className="rounded-xl">
                       <RefreshCw className="w-4 h-4" />
+                    </Button>
+                  </>
+                )}
+
+                {result && (
+                  <>
+                    <Button
+                      onClick={() => navigate('/dashboard')}
+                      className="rounded-xl flex-1 glow-effect"
+                    >
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Go to Dashboard
+                    </Button>
+                    <Button variant="outline" onClick={reset} className="rounded-xl">
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      New Analysis
                     </Button>
                   </>
                 )}
@@ -290,33 +374,31 @@ const Predict = () => {
                     AI Insights
                   </h2>
 
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    {result.explanation}
-                  </p>
+                  <div className="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    <p className="text-foreground/90 mb-6 leading-relaxed">
+                      {result.explanation}
+                    </p>
 
-                  <h3 className="font-semibold mb-3">Gentle Suggestions</h3>
-                  <ul className="space-y-3">
-                    {result.suggestions.map((suggestion, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 + index * 0.1 }}
-                        className="flex items-start gap-3 text-sm"
-                      >
-                        <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary font-medium text-xs">
-                          {index + 1}
-                        </span>
-                        <span className="text-muted-foreground">{suggestion}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                    <h3 className="font-semibold mb-3">Gentle Suggestions</h3>
+                    <ul className="space-y-3">
+                      {result.suggestions.map((suggestion, index) => (
+                        <motion.li
+                          key={index}
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 + index * 0.1 }}
+                          className="flex items-start gap-3 text-sm"
+                        >
+                          <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary font-medium text-xs">
+                            {index + 1}
+                          </span>
+                          <span className="text-foreground/80">{suggestion}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
 
-                  {/* Telegram Button */}
-                  <Button className="w-full mt-6 rounded-xl" variant="outline">
-                    <Send className="w-4 h-4 mr-2" />
-                    Share via Telegram
-                  </Button>
+
                 </motion.div>
               )}
             </AnimatePresence>
