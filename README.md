@@ -52,8 +52,8 @@ https://emotion-compass.vercel.app/
 - **GET /api/emotions**: Retrieve list of supported emotions.
 
 ## Deployment
-The application is deployed on Heroku. You can access it via the following link:
-[Emotion Recognition App](https://your-heroku-app.herokuapp.com)
+The application is deployed on Vercel. You can access it via the following link:
+[Emotion Recognition App](https://emotion-compass.vercel.app/)
 
 ---
 
