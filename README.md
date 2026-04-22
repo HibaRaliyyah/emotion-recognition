@@ -3,6 +3,11 @@
 ## Project Overview
 This is an emotion recognition web application that uses machine learning algorithms to analyze facial expressions and classify them into various emotions.
 
+<img width="1358" height="610" alt="innerglow" src="https://github.com/user-attachments/assets/e242e267-666d-429e-a297-787a900f6a66" />
+
+## Link
+https://emotion-compass.vercel.app/
+
 ## Features
 - Real-time emotion detection
 - User-friendly interface
