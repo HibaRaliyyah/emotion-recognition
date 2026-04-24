@@ -20,7 +20,7 @@ https://emotion-compass.vercel.app/
 - **Backend:** Node.js, Express
 - **Machine Learning Framework:** TensorFlow
 - **Database:** MongoDB
-- **Deployment:** Heroku
+- **Deployment:** Vercel and render
 
 ## Installation
 1. Clone the repository:
@@ -50,11 +50,3 @@ https://emotion-compass.vercel.app/
   - Response: Detected emotion
 
 - **GET /api/emotions**: Retrieve list of supported emotions.
-
-## Deployment
-The application is deployed on Vercel. You can access it via the following link:
-[Emotion Recognition App](https://emotion-compass.vercel.app/)
-
----
-
-For further inquiries, feel free to reach out to the maintainers of this project.
