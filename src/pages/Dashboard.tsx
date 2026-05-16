@@ -278,12 +278,12 @@ const Dashboard = () => {
                         dataKey="day"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#000000', fontSize: 12 }}
+                        tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
                       />
                       <YAxis
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#000000', fontSize: 12 }}
+                        tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
                         unit="%"
                       />
                       <Tooltip
@@ -540,7 +540,7 @@ const Dashboard = () => {
                           setChatInsights(insightsResponse.insights || []);
 
                           // Show success feedback
-                          toast.success('Insight saved to your journal!');
+                          toast.success('💡 Insight saved to your journal!');
 
                           // Highlight insights card briefly
                           setHighlightInsights(true);

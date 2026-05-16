@@ -292,7 +292,7 @@ const ReflectionDetail = ({ insight }: { insight: any }) => (
         <div className="space-y-8">
             <section>
                 <h3 className="font-display text-lg font-semibold mb-3 text-primary/80">Your Thought</h3>
-                <div className="bg-primary/5 rounded-2xl p-6 text-black border border-primary/10 italic">
+                <div className="bg-primary/5 rounded-2xl p-6 text-white border border-primary/10 italic">
                     "{insight.userMessage}"
                 </div>
             </section>
