@@ -518,7 +518,7 @@ const Dashboard = () => {
                             `${r.mixedEmotion || r.dominantEmotion} (${r.confidence}% confidence) - ${formatDistanceToNow(new Date(r.createdAt), { addSuffix: true })}`
                           ).join('\n');
 
-                          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/chat/journal`, {
+                          const response = await fetch(`/api/chat/journal`, {
                             method: 'POST',
                             headers: {
                               'Content-Type': 'application/json',
