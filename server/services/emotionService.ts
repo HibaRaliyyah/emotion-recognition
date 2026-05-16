@@ -2,7 +2,7 @@
  * Service for communicating with the external emotion recognition API
  */
 
-const EMOTION_API_URL = process.env.EMOTION_API_URL || 'https://facial-emotion-recognition-production-6ffd.up.railway.app/predict';
+const EMOTION_API_URL = process.env.EMOTION_API_URL || 'https://facial-emotion-recognition-production-fc1f.up.railway.app/predict';
 const USE_MOCK_API = process.env.USE_MOCK_EMOTION_API === 'true';
 
 // OpenRouter AI Configuration
