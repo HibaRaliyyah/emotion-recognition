@@ -177,7 +177,7 @@ const ReflectionCard = ({ insight, isActive, onClick }: any) => {
                 </span>
             )}
             <div className="flex justify-between items-start mb-2">
-                <span className="font-bold text-sm text-white truncate mr-2">
+                <span className="font-bold text-sm text-foreground truncate mr-2">
                     {insight.userMessage.length > 30 ? insight.userMessage.substring(0, 30) + '...' : insight.userMessage}
                 </span>
                 <span className="text-[10px] text-muted-foreground whitespace-nowrap">
@@ -273,7 +273,7 @@ const ReflectionDetail = ({ insight }: { insight: any }) => (
     >
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
             <div>
-                <h2 className="font-display text-3xl font-bold text-white mb-2">
+                <h2 className="font-display text-3xl font-bold text-foreground mb-2">
                     AI Reflection
                 </h2>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -292,7 +292,7 @@ const ReflectionDetail = ({ insight }: { insight: any }) => (
         <div className="space-y-8">
             <section>
                 <h3 className="font-display text-lg font-semibold mb-3 text-primary/80">Your Thought</h3>
-                <div className="bg-primary/5 rounded-2xl p-6 text-white border border-primary/10 italic">
+                <div className="bg-primary/5 rounded-2xl p-6 text-black border border-primary/10 italic">
                     "{insight.userMessage}"
                 </div>
             </section>

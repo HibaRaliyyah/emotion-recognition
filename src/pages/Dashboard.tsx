@@ -540,7 +540,7 @@ const Dashboard = () => {
                           setChatInsights(insightsResponse.insights || []);
 
                           // Show success feedback
-                          toast.success('💡 Insight saved to your journal!');
+                          toast.success('Insight saved to your journal!');
 
                           // Highlight insights card briefly
                           setHighlightInsights(true);
