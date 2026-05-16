@@ -302,8 +302,37 @@ const ReflectionDetail = ({ insight }: { insight: any }) => (
                     <MessageCircle className="w-5 h-5 text-primary" />
                     AI Guidance
                 </h3>
-                <div className="bg-muted/30 rounded-2xl p-6 text-muted-foreground leading-relaxed border border-border/50">
-                    {insight.aiReply}
+                <div className="bg-muted/30 rounded-2xl p-6 text-muted-foreground leading-relaxed border border-border/50 space-y-2">
+                    {insight.aiReply
+                        .split(/\n(?=\d+\.\s)|\n\n/)
+                        .filter(Boolean)
+                        .map((block: string, bi: number) => {
+                            const listMatch = block.match(/^(\d+)\.\s(.+)$/s);
+                            if (listMatch) {
+                                const [, num, rest] = listMatch;
+                                return (
+                                    <div key={bi} className="flex items-start gap-3">
+                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center mt-0.5">
+                                            {num}
+                                        </span>
+                                        <span
+                                            className="flex-1"
+                                            dangerouslySetInnerHTML={{
+                                                __html: rest.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                                            }}
+                                        />
+                                    </div>
+                                );
+                            }
+                            return (
+                                <p
+                                    key={bi}
+                                    dangerouslySetInnerHTML={{
+                                        __html: block.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                                    }}
+                                />
+                            );
+                        })}
                 </div>
             </section>
 
