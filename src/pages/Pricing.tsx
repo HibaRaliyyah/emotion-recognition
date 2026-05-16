@@ -35,7 +35,6 @@ const Pricing = () => {
         "Mixed emotion detection",
         "AI-powered insights",
         "30-day history",
-        "Telegram integration",
         "Priority support",
       ],
       popular: true,
@@ -87,21 +86,19 @@ const Pricing = () => {
             <div className="inline-flex items-center gap-3 bg-muted rounded-full p-1.5">
               <button
                 onClick={() => setBillingCycle("monthly")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  billingCycle === "monthly"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${billingCycle === "monthly"
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setBillingCycle("yearly")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  billingCycle === "yearly"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${billingCycle === "yearly"
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                  }`}
               >
                 Yearly
                 <span className="ml-2 text-xs bg-accent text-accent-foreground px-2 py-0.5 rounded-full">
@@ -121,9 +118,8 @@ const Pricing = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -5 }}
-              className={`relative glass-card rounded-3xl p-8 ${
-                plan.popular ? "ring-2 ring-primary" : ""
-              }`}
+              className={`relative glass-card rounded-3xl p-8 ${plan.popular ? "ring-2 ring-primary" : ""
+                }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -159,9 +155,8 @@ const Pricing = () => {
 
               <Button
                 onClick={() => handleSubscribe(plan.name)}
-                className={`w-full rounded-xl py-6 ${
-                  plan.popular ? "glow-effect" : ""
-                }`}
+                className={`w-full rounded-xl py-6 ${plan.popular ? "glow-effect" : ""
+                  }`}
                 variant={plan.popular ? "default" : "outline"}
               >
                 Get Started

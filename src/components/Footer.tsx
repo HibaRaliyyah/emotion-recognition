@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Brain, Github, Twitter, Linkedin, Mail, Heart } from "lucide-react";
+import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -8,7 +8,6 @@ export const Footer = () => {
   const footerLinks = {
     product: [
       { label: "Features", path: "/about" },
-      { label: "Pricing", path: "/pricing" },
       { label: "Dashboard", path: "/dashboard" },
       { label: "API", path: "/instructions" },
     ],
@@ -47,11 +46,12 @@ export const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* Brand */}
           <div className="col-span-2">
+
             <Link to="/" className="flex items-center gap-2 group mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Brain className="w-5 h-5 text-primary-foreground" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
+                <img src="/innerglow.png" alt="InnerGlow" className="w-full h-full object-cover scale-125" />
               </div>
-              <span className="font-display font-bold text-xl">EmotiSense</span>
+              <span className="font-display font-bold text-xl">InnerGlow</span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Advanced facial emotion recognition powered by AI. Understand emotions, improve well-being, and connect better with yourself and others.
@@ -97,11 +97,9 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} EmotiSense. All rights reserved.
+            © {currentYear} InnerGlow. All rights reserved.
           </p>
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-accent fill-accent" /> for emotional well-being
-          </p>
+
         </div>
       </div>
     </footer>

@@ -33,7 +33,7 @@ const Home = () => {
   return (
     <div className="page-container">
       <ParticleBackground className="fixed inset-0 -z-10" />
-      
+
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
         {/* Blur blobs */}
@@ -66,7 +66,7 @@ const Home = () => {
 
             <FadeUp delay={0.2}>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-                Harness the power of advanced AI to recognize, understand, and track facial emotions. 
+                Harness the power of advanced AI to recognize, understand, and track facial emotions.
                 Gain deeper insights into emotional well-being with our cutting-edge platform.
               </p>
             </FadeUp>
@@ -112,7 +112,7 @@ const Home = () => {
           <StaggerContainer className="text-center mb-16">
             <FadeUp>
               <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-                Why Choose <span className="gradient-text">EmotiSense</span>?
+                Why Choose <span className="gradient-text">InnerGlow</span>?
               </h2>
             </FadeUp>
             <FadeUp delay={0.1}>

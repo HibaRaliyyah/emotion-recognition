@@ -9,27 +9,27 @@ const Instructions = () => {
   const steps = [
     {
       icon: Camera,
-      title: "Allow Camera Access",
-      description: "Grant permission for your browser to access your webcam. Your privacy is protected - no images are stored.",
-      tips: ["Use good lighting for best results", "Position your face in the center", "Remove glasses if possible"],
+      title: "Start Your Camera",
+      description: "Click the 'Start Camera' button and grant permission for your browser to access your webcam.",
+      tips: ["Use good lighting for best results", "Position your face in the center", "Your privacy is protected - no images are stored"],
     },
     {
       icon: MousePointer,
-      title: "Capture Your Expression",
-      description: "Click the capture button when you're ready. Hold a natural expression for the most accurate reading.",
-      tips: ["Stay still for 2-3 seconds", "Express naturally, don't force", "Multiple captures improve accuracy"],
+      title: "Capture & Analyze",
+      description: "Click 'Capture' to freeze your expression, then select 'Analyze Emotion' to process your image.",
+      tips: ["Stay still for 2-3 seconds", "Express naturally, don't force", "Our AI processes everything in real-time"],
     },
     {
       icon: BarChart3,
-      title: "View Emotion Analysis",
-      description: "Our AI instantly analyzes your facial expression and provides detailed emotion percentages.",
-      tips: ["All 6 basic emotions are detected", "Mixed emotions are identified", "Confidence scores included"],
+      title: "Explore Your Emotions",
+      description: "Review your 'Emotion Analysis' breakdown and 'Detected Mixed Emotion' label for deep clarity.",
+      tips: ["Detailed percentage breakdown", "Mixed emotion detection", "Real-time confidence scores"],
     },
     {
       icon: MessageSquare,
-      title: "Get Personalized Insights",
-      description: "Receive AI-generated explanations and gentle suggestions based on your detected emotions.",
-      tips: ["Suggestions are supportive, not prescriptive", "Connect to Telegram for reminders", "Track over time in Dashboard"],
+      title: "Sync & Track",
+      description: "Explore your full emotional history and track your well-being over time in the Dashboard.",
+      tips: ["Personalized AI explanations", "Gentle, supportive suggestions", "Track historical trends over time"],
     },
   ];
 
@@ -49,7 +49,7 @@ const Instructions = () => {
       {/* Hero */}
       <section className="relative py-20 px-4">
         <div className="blur-blob w-96 h-96 bg-accent/15 top-0 left-0" />
-        
+
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <StaggerContainer>
             <FadeUp>
@@ -59,7 +59,7 @@ const Instructions = () => {
             </FadeUp>
             <FadeUp delay={0.1}>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Get started with EmotiSense in four simple steps. Our intuitive interface guides you through the entire emotion recognition process.
+                Get started with InnerGlow in four simple steps. Our intuitive interface guides you through the entire emotion recognition process.
               </p>
             </FadeUp>
           </StaggerContainer>
@@ -80,7 +80,7 @@ const Instructions = () => {
                 className="glass-card rounded-3xl p-8 relative overflow-hidden group hover:scale-[1.02] transition-transform"
               >
                 <div className="blur-blob w-48 h-48 bg-primary/10 -top-24 -right-24 group-hover:bg-primary/20 transition-colors" />
-                
+
                 <div className="relative z-10 grid md:grid-cols-[auto,1fr,1fr] gap-8 items-start">
                   {/* Step number and icon */}
                   <div className="flex items-center gap-6">
