@@ -123,17 +123,35 @@
     @apply border-border;
   }
 
+  html {
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    /* Safe area for notched phones */
+    padding-bottom: env(safe-area-inset-bottom);
+    /* Prevent text size inflation on mobile */
+    -webkit-text-size-adjust: 100%;
+    /* Prevent overflow */
+    overflow-x: hidden;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  /* Minimum touch target sizes */
+  button, a, [role="button"] {
+    min-height: 36px;
+  }
+
+  /* Better tap highlighting */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', system-ui, sans-serif;
   }
 }

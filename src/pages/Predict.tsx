@@ -171,25 +171,25 @@ const Predict = () => {
   }, [startCamera]);
 
   return (
-    <div className="page-container pt-24 pb-20">
+    <div className="page-container pt-20 sm:pt-24 pb-16 sm:pb-20">
       <ParticleBackground className="fixed inset-0 -z-10 opacity-30" />
 
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
         {/* Header */}
-        <StaggerContainer className="text-center mb-12">
+        <StaggerContainer className="text-center mb-8 sm:mb-12">
           <FadeUp>
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
               Emotion <span className="gradient-text">Prediction</span>
             </h1>
           </FadeUp>
           <FadeUp delay={0.1}>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2">
               Capture your expression and let our AI reveal the emotions behind it with detailed insights and personalized suggestions.
             </p>
           </FadeUp>
         </StaggerContainer>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-5 sm:gap-8">
           {/* Camera Section */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}

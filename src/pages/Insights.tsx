@@ -13,6 +13,7 @@ const Insights = () => {
     const [chatInsights, setChatInsights] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedInsight, setSelectedInsight] = useState<any | null>(null);
+    const [mobileView, setMobileView] = useState<'list' | 'detail'>('list');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,80 +37,114 @@ const Insights = () => {
         fetchData();
     }, []);
 
-    // Set default selection
+    // Set default selection (desktop only)
     useEffect(() => {
         if (chatInsights.length > 0 && !selectedInsight) {
             setSelectedInsight(chatInsights[0]);
         }
     }, [chatInsights]);
 
+    const handleSelectInsight = (insight: any) => {
+        setSelectedInsight(insight);
+        setMobileView('detail');
+    };
+
     return (
-        <div className="page-container pt-24 pb-20">
+        <div className="page-container pt-20 sm:pt-24 pb-16 sm:pb-20">
             <ParticleBackground className="fixed inset-0 -z-10 opacity-30" />
 
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
                 {/* Header */}
-                <StaggerContainer className="mb-12">
-                    <div className="flex items-center gap-4 mb-6">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => navigate(-1)}
-                            className="rounded-full bg-muted/50 hover:bg-muted"
-                        >
-                            <ArrowLeft className="w-5 h-5" />
-                        </Button>
+                <StaggerContainer className="mb-8 sm:mb-12">
+                    <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        {/* Mobile detail back button */}
+                        {mobileView === 'detail' ? (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setMobileView('list')}
+                                className="lg:hidden rounded-full bg-muted/50 hover:bg-muted flex-shrink-0"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => navigate(-1)}
+                                className="rounded-full bg-muted/50 hover:bg-muted flex-shrink-0"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </Button>
+                        )}
                         <FadeUp>
-                            <h1 className="font-display text-4xl md:text-5xl font-bold">
-                                Chat <span className="gradient-text">History</span>
+                            <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold">
+                                {mobileView === 'detail' ? (
+                                    <span className="lg:hidden">AI <span className="gradient-text">Reflection</span></span>
+                                ) : null}
+                                <span className={mobileView === 'detail' ? 'hidden lg:inline' : ''}>
+                                    Chat <span className="gradient-text">History</span>
+                                </span>
                             </h1>
                         </FadeUp>
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <FadeUp delay={0.1}>
-                            <p className="text-muted-foreground">
-                                Review your conversations with your AI emotional companion.
-                            </p>
-                        </FadeUp>
-                    </div>
+                    <FadeUp delay={0.1}>
+                        <p className="text-sm sm:text-base text-muted-foreground">
+                            Review your conversations with your AI emotional companion.
+                        </p>
+                    </FadeUp>
                 </StaggerContainer>
 
-                <div className="grid lg:grid-cols-3 gap-8">
-                    {/* List Section */}
+                {/* DESKTOP: side-by-side grid */}
+                <div className="hidden lg:grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-1 space-y-4">
                         <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                             <MessageCircle className="w-5 h-5 text-primary" /> Your Conversations
                         </h2>
-
                         {isLoading ? (
                             <div className="space-y-4">
-                                {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="glass-card rounded-2xl p-4 animate-pulse h-24" />
-                                ))}
+                                {[1,2,3,4].map(i => <div key={i} className="glass-card rounded-2xl p-4 animate-pulse h-24" />)}
                             </div>
                         ) : chatInsights.length === 0 ? (
                             <EmptyState type="reflections" />
                         ) : (
-                            chatInsights.map((insight) => (
-                                <ReflectionCard
-                                    key={insight._id}
-                                    insight={insight}
+                            chatInsights.map(insight => (
+                                <ReflectionCard key={insight._id} insight={insight}
                                     isActive={selectedInsight?._id === insight._id}
-                                    onClick={() => setSelectedInsight(insight)}
-                                />
+                                    onClick={() => setSelectedInsight(insight)} />
                             ))
                         )}
                     </div>
-
-                    {/* Details Section */}
                     <div className="lg:col-span-2">
-                        {selectedInsight ? (
-                            <ReflectionDetail insight={selectedInsight} />
-                        ) : (
-                            <PlaceholderState type="Conversation" />
-                        )}
+                        {selectedInsight ? <ReflectionDetail insight={selectedInsight} /> : <PlaceholderState type="Conversation" />}
                     </div>
+                </div>
+
+                {/* MOBILE: show list OR detail */}
+                <div className="lg:hidden">
+                    {mobileView === 'list' ? (
+                        <div className="space-y-3">
+                            <h2 className="text-base font-bold mb-4 flex items-center gap-2">
+                                <MessageCircle className="w-4 h-4 text-primary" /> Your Conversations
+                            </h2>
+                            {isLoading ? (
+                                <div className="space-y-3">
+                                    {[1,2,3,4].map(i => <div key={i} className="glass-card rounded-2xl p-4 animate-pulse h-20" />)}
+                                </div>
+                            ) : chatInsights.length === 0 ? (
+                                <EmptyState type="reflections" />
+                            ) : (
+                                chatInsights.map(insight => (
+                                    <ReflectionCard key={insight._id} insight={insight}
+                                        isActive={false}
+                                        onClick={() => handleSelectInsight(insight)} />
+                                ))
+                            )}
+                        </div>
+                    ) : (
+                        selectedInsight ? <ReflectionDetail insight={selectedInsight} /> : <PlaceholderState type="Conversation" />
+                    )}
                 </div>
             </div>
         </div>
@@ -269,40 +304,40 @@ const ReflectionDetail = ({ insight }: { insight: any }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         key={insight._id}
-        className="glass-card rounded-3xl p-8"
+        className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8"
     >
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
             <div>
-                <h2 className="font-display text-3xl font-bold text-foreground mb-2">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
                     AI Reflection
                 </h2>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         {new Date(insight.createdAt).toLocaleDateString()}
                     </span>
                     <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         {new Date(insight.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
             </div>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-5 sm:space-y-8">
             <section>
-                <h3 className="font-display text-lg font-semibold mb-3 text-primary/80">Your Thought</h3>
-                <div className="bg-primary/5 rounded-2xl p-6 text-black border border-primary/10 italic">
+                <h3 className="font-display text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-primary/80">Your Thought</h3>
+                <div className="bg-primary/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-black dark:text-foreground border border-primary/10 italic text-sm sm:text-base">
                     "{insight.userMessage}"
                 </div>
             </section>
 
             <section>
-                <h3 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
-                    <MessageCircle className="w-5 h-5 text-primary" />
+                <h3 className="font-display text-base sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                     AI Guidance
                 </h3>
-                <div className="bg-muted/30 rounded-2xl p-6 text-muted-foreground leading-relaxed border border-border/50 space-y-2">
+                <div className="bg-muted/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-muted-foreground leading-relaxed border border-border/50 space-y-2 text-sm sm:text-base">
                     {insight.aiReply
                         .split(/\n(?=\d+\.\s)|\n\n/)
                         .filter(Boolean)
