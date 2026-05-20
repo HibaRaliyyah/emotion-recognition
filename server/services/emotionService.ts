@@ -517,12 +517,12 @@ function generateMockEmotionData(): ExternalAPIResponse {
  */
 export async function predictEmotion(base64Image: string): Promise<EmotionPrediction> {
     try {
-        // DISABLED: Mock API to force real Railway API usage
-        // if (USE_MOCK_API) {
-        //     console.warn('⚠️  Using MOCK emotion detection (external API disabled)');
-        //     const mockData = generateMockEmotionData();
-        //     return processEmotionResponse(mockData, 'mock');
-        // }
+        // Use mock API if explicitly enabled via env var
+        if (USE_MOCK_API) {
+            console.warn('⚠️  Using MOCK emotion detection (USE_MOCK_EMOTION_API=true)');
+            const mockData = generateMockEmotionData();
+            return processEmotionResponse(mockData, 'mock');
+        }
 
         // Remove data URL prefix if present (e.g., "data:image/jpeg;base64,")
         const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
@@ -541,7 +541,7 @@ export async function predictEmotion(base64Image: string): Promise<EmotionPredic
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `API request failed with status ${response.status} `);
+            throw new Error(errorData.error || `API request failed with status ${response.status}`);
         }
 
         const data: ExternalAPIResponse = await response.json();
@@ -560,28 +560,31 @@ export async function predictEmotion(base64Image: string): Promise<EmotionPredic
             syscall: error.syscall
         });
 
-        // DISABLED: Fallback to mock data on network errors to force real API usage
-        // const isDNSError =
-        //     error.cause?.code === 'ENOTFOUND' ||
-        //     error.code === 'ENOTFOUND' ||
-        //     error.syscall === 'getaddrinfo' ||
-        //     error.message?.includes('getaddrinfo');
-
-        // const isNetworkError =
-        //     error.name === 'AbortError' ||
-        //     error.name === 'TimeoutError' ||
-        //     error.message?.includes('fetch failed') ||
-        //     error.cause?.syscall === 'getaddrinfo';
-
-        // if (isDNSError || isNetworkError) {
-        //     console.warn('⚠️  External API unavailable, using MOCK emotion detection as fallback');
-        //     const mockData = generateMockEmotionData();
-        //     return processEmotionResponse(mockData, 'mock');
-        // }
-
-        // Handle specific error cases
+        // Handle "No face detected" as a proper user-facing 400 error
         if (error.message?.includes('No face detected')) {
             throw new Error('No face detected in the image. Please ensure your face is clearly visible.');
+        }
+
+        // Fallback to mock data on any network/DNS/timeout error
+        const isDNSError =
+            error.cause?.code === 'ENOTFOUND' ||
+            error.code === 'ENOTFOUND' ||
+            error.syscall === 'getaddrinfo' ||
+            error.message?.includes('getaddrinfo');
+
+        const isNetworkError =
+            error.name === 'AbortError' ||
+            error.name === 'TimeoutError' ||
+            error.message?.includes('fetch failed') ||
+            error.cause?.syscall === 'getaddrinfo';
+
+        const isServerError =
+            error.message?.includes('API request failed with status 5');
+
+        if (isDNSError || isNetworkError || isServerError) {
+            console.warn('⚠️  External API unavailable, using MOCK emotion detection as fallback');
+            const mockData = generateMockEmotionData();
+            return processEmotionResponse(mockData, 'mock');
         }
 
         throw new Error(error.message || 'Failed to analyze emotion. Please try again.');

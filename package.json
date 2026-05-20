@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "nodemon --exec \"dotenv -e .env -- tsx server/index.ts\"",
+    "server": "nodemon --ext ts,js,mjs,cjs,json --exec \"dotenv -e .env -- tsx server/index.ts\"",
     "client": "vite",
     "dev:fullstack": "concurrently \"npm run server\" \"npm run client\""
   },
