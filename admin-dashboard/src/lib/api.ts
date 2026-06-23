@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api/admin';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/admin';
 
 export const fetchUsers = async () => {
   const response = await fetch(`${API_BASE_URL}/users`);
