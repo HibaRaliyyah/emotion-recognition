@@ -16,7 +16,7 @@ export default function Sidebar() {
     <div className="w-64 bg-card border-r border-border h-full p-4 flex flex-col">
       <div className="mb-8 px-4">
         <h1 className="text-xl font-bold text-primary">Admin Dashboard</h1>
-        <p className="text-xs text-muted-foreground mt-1">Emotion Compass</p>
+        <p className="text-xs text-muted-foreground mt-1">InnerGlow</p>
       </div>
 
       <nav className="flex-1 space-y-2">
