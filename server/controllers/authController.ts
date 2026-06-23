@@ -10,12 +10,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         await connectDB();
 
-        const { email, password, name } = req.body;
+        const { username, password, name } = req.body;
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ username });
         if (existingUser) {
-            res.status(409).json({ error: 'User already exists with this email' });
+            res.status(409).json({ error: 'User already exists with this username' });
             return;
         }
 
@@ -24,7 +24,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
         // Create user
         const user = await User.create({
-            email,
+            username,
             password: hashedPassword,
             name,
         });
@@ -37,7 +37,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             token,
             user: {
                 id: user._id,
-                email: user.email,
+                username: user.username,
                 name: user.name,
             },
         });
@@ -54,19 +54,19 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         await connectDB();
 
-        const { email, password } = req.body;
+        const { username, password } = req.body;
 
         // Find user
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ username });
         if (!user) {
-            res.status(401).json({ error: 'Invalid email or password' });
+            res.status(401).json({ error: 'Invalid username or password' });
             return;
         }
 
         // Compare passwords
         const isPasswordValid = await comparePassword(password, user.password!);
         if (!isPasswordValid) {
-            res.status(401).json({ error: 'Invalid email or password' });
+            res.status(401).json({ error: 'Invalid username or password' });
             return;
         }
 
@@ -78,7 +78,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             token,
             user: {
                 id: user._id,
-                email: user.email,
+                username: user.username,
                 name: user.name,
             },
         });
@@ -107,7 +107,7 @@ export const getProfile = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({
             user: {
                 id: user._id,
-                email: user.email,
+                username: user.username,
                 name: user.name,
                 createdAt: user.createdAt,
             },
@@ -126,42 +126,42 @@ export const stackAuthSync = async (req: Request, res: Response): Promise<void> 
     try {
         await connectDB();
 
-        const { stackUserId, email, name } = req.body;
+        const { stackUserId, username, name } = req.body;
 
-        if (!stackUserId || !email) {
-            res.status(400).json({ error: 'Stack user ID and email are required' });
+        if (!stackUserId || !username) {
+            res.status(400).json({ error: 'Stack user ID and username are required' });
             return;
         }
 
         // Find existing user by Stack Auth ID or email
         let user = await User.findOne({
-            $or: [{ stackAuthId: stackUserId }, { email }],
+            $or: [{ stackAuthId: stackUserId }, { username }],
         });
 
         if (user) {
             // Update existing user
             user.stackAuthId = stackUserId;
-            user.email = email;
+            user.username = username;
             user.name = name || user.name;
             await user.save();
 
-            console.log('✅ Updated existing user from Stack Auth:', user.email);
+            console.log('✅ Updated existing user from Stack Auth:', user.username);
         } else {
             // Create new user
             user = await User.create({
                 stackAuthId: stackUserId,
-                email,
-                name: name || email.split('@')[0],
+                username,
+                name: name || username,
             });
 
-            console.log('✅ Created new user from Stack Auth:', user.email);
+            console.log('✅ Created new user from Stack Auth:', user.username);
         }
 
         res.status(200).json({
             message: 'User synced successfully',
             user: {
                 id: user._id,
-                email: user.email,
+                username: user.username,
                 name: user.name,
                 stackAuthId: user.stackAuthId,
             },

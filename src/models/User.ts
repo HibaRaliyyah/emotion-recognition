@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUser extends Document {
-    email: string;
+    username: string;
     password?: string; // Optional for Stack Auth users
     name: string;
     stackAuthId?: string; // Stack Auth user ID
@@ -11,13 +11,13 @@ export interface IUser extends Document {
 
 const UserSchema: Schema = new Schema(
     {
-        email: {
+        username: {
             type: String,
-            required: [true, 'Email is required'],
+            required: [true, 'Username is required'],
             unique: true,
             lowercase: true,
             trim: true,
-            match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address'],
+            minlength: [3, 'Username must be at least 3 characters'],
         },
         password: {
             type: String,

@@ -14,7 +14,7 @@ const router = Router();
 router.post(
     '/register',
     [
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+        body('username').notEmpty().withMessage('Username is required'),
         body('password')
             .isLength({ min: 6 })
             .withMessage('Password must be at least 6 characters'),
@@ -32,7 +32,7 @@ router.post(
 router.post(
     '/login',
     [
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+        body('username').notEmpty().withMessage('Username is required'),
         body('password').notEmpty().withMessage('Password is required'),
         validateRequest,
     ],
@@ -55,7 +55,7 @@ router.post(
     '/stack-sync',
     [
         body('stackUserId').notEmpty().withMessage('Stack user ID is required'),
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+        body('username').notEmpty().withMessage('Username is required'),
         validateRequest,
     ],
     stackAuthSync

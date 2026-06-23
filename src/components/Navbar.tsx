@@ -129,7 +129,7 @@ export const Navbar = ({ isDark, toggleTheme }: NavbarProps) => {
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">{user.name}</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {user.email}
+                        @{user.username}
                       </p>
                     </div>
                   </DropdownMenuLabel>
@@ -192,7 +192,7 @@ export const Navbar = ({ isDark, toggleTheme }: NavbarProps) => {
               <>
                 <div className="px-4 py-3 rounded-xl bg-muted">
                   <p className="text-sm font-medium">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <p className="text-xs text-muted-foreground">@{user.username}</p>
                 </div>
                 <Button
                   onClick={handleLogout}

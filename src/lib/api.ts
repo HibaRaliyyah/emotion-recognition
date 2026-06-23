@@ -3,7 +3,7 @@ const API_URL = '/api';
 // Types
 export interface User {
     id: string;
-    email: string;
+    username: string;
     name: string;
     createdAt?: string;
 }
@@ -73,11 +73,11 @@ export const authAPI = {
     /**
      * Register a new user
      */
-    register: async (email: string, password: string, name: string): Promise<AuthResponse> => {
+    register: async (username: string, password: string, name: string): Promise<AuthResponse> => {
         const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, name }),
+            body: JSON.stringify({ username, password, name }),
         });
 
         if (!response.ok) {
@@ -93,11 +93,11 @@ export const authAPI = {
     /**
      * Login a user
      */
-    login: async (email: string, password: string): Promise<AuthResponse> => {
+    login: async (username: string, password: string): Promise<AuthResponse> => {
         const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ username, password }),
         });
 
         if (!response.ok) {

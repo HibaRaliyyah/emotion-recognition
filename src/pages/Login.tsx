@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
+import { User as UserIcon, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
 
     // Simple validation
-    if (!email || !password || (!isLogin && !name)) {
+    if (!username || !password || (!isLogin && !name)) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -33,15 +33,15 @@ const Login = () => {
 
     try {
       if (isLogin) {
-        await login(email, password);
+        await login(username, password);
         toast.success("Login successful!");
-        setEmail("");
+        setUsername("");
         setPassword("");
         navigate("/dashboard");
       } else {
-        await register(email, password, name);
+        await register(username, password, name);
         toast.success("Account created successfully!");
-        setEmail("");
+        setUsername("");
         setPassword("");
         setName("");
         navigate("/dashboard");
@@ -117,7 +117,7 @@ const Login = () => {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="fullname"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="rounded-xl py-6"
@@ -126,17 +126,17 @@ const Login = () => {
               </motion.div>
             )}
 
-            {/* Email */}
+            {/* Username */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="rounded-xl py-6 pl-12"
                   autoComplete="off"
                 />

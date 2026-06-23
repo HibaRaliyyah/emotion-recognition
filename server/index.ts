@@ -8,6 +8,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.js';
 import emotionRoutes from './routes/emotions.js';
 import chatRoutes from './routes/chat.js';
+import adminRoutes from './routes/admin.js';
 
 
 // Load environment variables
@@ -23,9 +24,11 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 app.use(helmet());
 
 // CORS configuration
+const ADMIN_URL = process.env.ADMIN_URL || 'http://localhost:5174';
+
 app.use(
     cors({
-        origin: CLIENT_URL,
+        origin: [CLIENT_URL, ADMIN_URL],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
@@ -66,6 +69,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/emotions', emotionRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 // 404 handler
