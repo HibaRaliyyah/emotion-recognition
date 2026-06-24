@@ -1,3 +1,4 @@
+import 'newrelic';
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
